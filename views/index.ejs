@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= pageTitle %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="header">
+    <div>
+      <h1>GPU Profit Dashboard</h1>
+      <p>Track Pearl mining revenue, electricity cost, and estimated profit.</p>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/gpus">Saved GPUs</a>
+      <a href="/add">Add GPU</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="price-banner">
+      <div>
+        <span class="label">Live Pearl Price</span>
+        <strong><%= money(pearlPrice.priceUsd) %> / PRL</strong>
+        <p>Source: <%= pearlPrice.source %> | Updated: <%= formatDate(pearlPrice.updatedAt) %></p>
+        <% if (pearlPrice.error) { %>
+          <p class="warning">Could not refresh price: <%= pearlPrice.error %>. Using the last available price.</p>
+        <% } %>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <div class="card stat">
+        <span class="label">Saved GPUs</span>
+        <strong><%= gpus.length %></strong>
+      </div>
+      <div class="card stat">
+        <span class="label">Daily PRL Added</span>
+        <strong><%= totals.dailyPrl.toFixed(2) %> PRL</strong>
+      </div>
+      <div class="card stat">
+        <span class="label">Daily Revenue</span>
+        <strong><%= money(totals.dailyRevenue) %></strong>
+      </div>
+      <div class="card stat profit">
+        <span class="label">Daily Net Profit</span>
+        <strong><%= money(totals.dailyProfit) %></strong>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Farm Totals</h2>
+      <div class="totals-list">
+        <p><span>Total Hashrate</span><strong><%= totals.totalHashrate.toFixed(2) %> TH/s</strong></p>
+        <p><span>Total Power</span><strong><%= totals.totalWatts.toFixed(0) %> W</strong></p>
+        <p><span>Daily PRL Mined</span><strong><%= totals.dailyPrl.toFixed(4) %> PRL</strong></p>
+        <p><span>Daily Revenue Added</span><strong><%= money(totals.dailyRevenue) %></strong></p>
+        <p><span>Daily Power Cost</span><strong><%= money(totals.dailyPowerCost) %></strong></p>
+        <p><span>Daily Net Profit</span><strong><%= money(totals.dailyProfit) %></strong></p>
+        <p><span>Monthly PRL</span><strong><%= totals.monthlyPrl.toFixed(2) %> PRL</strong></p>
+        <p><span>Monthly Revenue</span><strong><%= money(totals.monthlyRevenue) %></strong></p>
+        <p><span>Monthly Power Cost</span><strong><%= money(totals.monthlyPowerCost) %></strong></p>
+        <p><span>Monthly Net Profit</span><strong><%= money(totals.monthlyProfit) %></strong></p>
+        <p><span>Estimated Yearly Profit</span><strong><%= money(totals.yearlyProfit) %></strong></p>
+      </div>
+    </section>
+
+    <section class="actions">
+      <a class="button" href="/add">Add a GPU</a>
+      <form method="POST" action="/sample-data">
+        <button type="submit">Add Sample Data</button>
+      </form>
+      <form method="POST" action="/clear">
+        <button class="danger" type="submit">Clear All</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

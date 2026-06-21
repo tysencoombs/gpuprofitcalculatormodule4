@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= pageTitle %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="header">
+    <div>
+      <h1>Saved GPUs</h1>
+      <p>Each saved GPU is stored in SQLite and calculated with the live Pearl price.</p>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/gpus">Saved GPUs</a>
+      <a href="/add">Add GPU</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="price-banner">
+      <div>
+        <span class="label">Pearl Price Used</span>
+        <strong><%= money(pearlPrice.priceUsd) %> / PRL</strong>
+        <p>Source: <%= pearlPrice.source %> | Updated: <%= formatDate(pearlPrice.updatedAt) %></p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Total Revenue Added</h2>
+      <p class="large-number"><%= money(totals.dailyRevenue) %> per day</p>
+      <p><strong><%= totals.dailyPrl.toFixed(4) %> PRL/day</strong> at <strong><%= money(pearlPrice.priceUsd) %></strong> per PRL.</p>
+      <p>Estimated monthly revenue before power cost: <strong><%= money(totals.monthlyRevenue) %></strong></p>
+    </section>
+
+    <% if (gpus.length === 0) { %>
+      <section class="card">
+        <h2>No GPUs saved yet</h2>
+        <p>Add a GPU or use sample data to test the calculator.</p>
+        <a class="button" href="/add">Add GPU</a>
+      </section>
+    <% } %>
+
+    <section class="gpu-grid">
+      <% gpus.forEach((gpu) => { %>
+        <article class="card gpu-card">
+          <div class="gpu-title-row">
+            <h2><%= gpu.name %></h2>
+            <form method="POST" action="/delete/<%= gpu.id %>">
+              <button class="danger small" type="submit">Delete</button>
+            </form>
+          </div>
+
+          <div class="metrics">
+            <p><span>Hashrate</span><strong><%= gpu.hashrate %> TH/s</strong></p>
+            <p><span>Watts</span><strong><%= gpu.watts %> W</strong></p>
+            <p><span>Daily PRL</span><strong><%= gpu.dailyPrl.toFixed(4) %> PRL</strong></p>
+            <p><span>Daily Revenue</span><strong><%= money(gpu.dailyRevenue) %></strong></p>
+            <p><span>Daily Power Cost</span><strong><%= money(gpu.dailyPowerCost) %></strong></p>
+            <p><span>Daily Profit</span><strong><%= money(gpu.dailyProfit) %></strong></p>
+            <p><span>Monthly PRL</span><strong><%= gpu.monthlyPrl.toFixed(2) %> PRL</strong></p>
+            <p><span>Monthly Profit</span><strong><%= money(gpu.monthlyProfit) %></strong></p>
+          </div>
+
+          <% if (gpu.notes) { %>
+            <p class="notes"><%= gpu.notes %></p>
+          <% } %>
+        </article>
+      <% }) %>
+    </section>
+  </main>
+</body>
+</html>

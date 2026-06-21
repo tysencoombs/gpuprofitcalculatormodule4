@@ -1,0 +1,17 @@
+{
+  "name": "gpu-profit-dashboard-webpage",
+  "version": "1.0.0",
+  "description": "A Node.js Express and SQLite web app for tracking GPU mining revenue using live Pearl pricing.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "author": "Tysen Coombs",
+  "license": "MIT",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "sqlite3": "^6.0.1"
+  }
+}
